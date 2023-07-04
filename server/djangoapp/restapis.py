@@ -45,6 +45,7 @@ def get_dealers_from_cf(url, **kwargs):
             dealer_obj = CarDealer(address=dealer["address"], city=dealer["city"], full_name=dealer["full_name"], id=dealer["id"], lat=dealer["lat"], long=dealer["long"], short_name=dealer["short_name"], st=dealer["st"], zip=dealer["zip"])
             results.append(dealer_obj)
 
+    print(results)
     return results
 
 def get_dealer_reviews_from_cf(url, dealer_id, **kwargs):
@@ -75,7 +76,6 @@ def get_dealer_reviews_from_cf(url, dealer_id, **kwargs):
             review_obj = DealerReview(dealership=new_review["dealership"], name=new_review["name"], purchase=new_review["purchase"], car_model=new_review["car_model"], car_year=new_review["car_year"], id=new_review["id"], purchase_date=new_review["purchase_date"], sentiment=None, review=new_review["review"], car_make=new_review["car_make"])
             review_obj.sentiment = analyze_review_sentiments(text=review_obj.review, version="2022-04-07", features="sentiment")
             results.append(review_obj)
-    print(results)
     return results
 # Create a get_dealer_reviews_from_cf method to get reviews by dealer id from a cloud function
 # def get_dealer_by_id_from_cf(url, dealerId):
@@ -99,7 +99,7 @@ def analyze_review_sentiments(**kwargs):
     if ("sentiment" in json_data):
         text = json_data["sentiment"]["document"]["label"]
         return text
-    else: return ""
+    else: return "neutral"
 
 def post_request(url, json_payload, **kwargs):
     try:
