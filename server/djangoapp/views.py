@@ -134,8 +134,9 @@ def add_review(request, dealer_id):
         json_payload["review"] = review
         print(json_payload)
         result = post_request("https://us-south.functions.appdomain.cloud/api/v1/web/WyattOrg_sentiment-analyzer/dealership-package/review", json_payload)
-        print(result)
-        return HttpResponse(result)
+        context["dealer_id"] = dealer_id
+        context["status"] = result
+        return render(request, 'djangoapp/review_submission.html', context) 
     if request.method == "GET":
         cars = CarModel.objects.all()
         context["cars"] = cars
